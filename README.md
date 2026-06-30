@@ -1,48 +1,132 @@
 
-# Guía de Modelos JS Backend — Respuestas Actividades 1, 2 y 3
+# Guía de Modelos JS Backend — Actividades 1, 2, 3 y Apropiación.
 
-## Actividad 1
+## Sistema PQRS — API REST con Node.js y Express
 
-El flujo ordenado es: **Cliente → Ruta → Controlador → Modelo → Base de datos**
-Y se regresa viceversa: **Base de datos → Modelo → Controlador → Ruta → Cliente.**
+Proyecto que implementa un sistema de Peticiones, Quejas, Reclamos y Sugerencias (PQRS) siguiendo una arquitectura por capas: Ruta → Controlador → Modelo → Respuesta HTTP.
 
-## Actividad 2
+### Actividad 1
 
-**¿Qué componente se encarga de recibir la petición HTTP y dirigirla al controlador?**
-RUTA, ya que es la que detecta la URL y el método HTTP (GET, POST, etc.) y asi mismo envía la petición al controlador.
+Flujo ordenado :
 
-**¿Qué componente se encarga de comunicarse con la base de datos?**
-Es MODELO. Contiene la lógica para consultar, insertar, actualizar o eliminar datos.
+Cliente → Ruta → Controlador → Modelo → Base de datos
 
-**¿Qué componente envía finalmente la respuesta HTTP al cliente?**
-El CONTROLADOR es el que recibe los datos procesados y construye una respuesta que es enviada de vuelta al cliente.
+De regreso:
 
-## Actividad 3
+Base de datos → Modelo → Controlador → Ruta → Cliente
 
-Relación entre el tipo de petición y su código de respuesta HTTP esperado:
 
-| Petición | Código esperado  |
-|----------|------------------|
-| GET      | 200              |
-| POST     | 201              |
-| DELETE   | 204              |
-| PUT      | 200              |
+### Actividad 2
 
-¨**Códigos:**
+¿Qué componente se encarga de recibir la petición HTTP y dirigirla al controlador?
+La Ruta, ya que detecta la URL y el método HTTP (GET, POST, etc.) y envía la petición al controlador correspondiente.
 
-> 200
-Significa que la petición se ha procesado correctamente y el servidor devuelve una respuesta con contenido (formato json).
-Se usa en **GET** cuando es para consultar información de manera exitosa, regresando los datos.
-Y se usa en **PUT** cuando un recurso es actualizado de manera exitosa y devuelve el recurso actualizado o con mensaje de confimación.
+¿Qué componente se encarga de comunicarse con la base de datos?
+El Modelo. Contiene la lógica para consultar, insertar, actualizar o eliminar datos.
 
-**GET Y PUT** Usan el código 200 ya que ambos terminan devolviendo un recurso existente en su estado actual, la diferencia es que llegan por caminos distintos.
+¿Qué componente envía finalmente la respuesta HTTP al cliente?
+El Controlador, que recibe los datos procesados y construye la respuesta enviada de vuelta al cliente.
 
-> 201
-Indica que la petición ha sido procesada y que se ha creado un recurso nuevo en el servidor (usuario nuevo o producto en la base de datos).
 
-Se usa en **POST** cuando se envía información para crear algo nuevo. La respuesta por lo general incluye el recurso recién creado.
+### Actividad 3
 
-> 204
-Significa que la petición fue procesada, pero el servidor no devuelve ningún contenido en la respuesta.
+Operación - Método HTTP - Código esperado - Obtener información - GET200 - Crear una PQRSPOST201 - Actualizar informaciónPUT200 - Eliminar una PQRS - DELETE 200 Error en el servidor—500
 
-Se usa en **DELETE** cuando se elimina un recurso y no hay nada que devolver pues el recurso ya es inexistente, no se envían datos.
+
+ Proyecto práctico — API de PQRS
+
+Estructura del proyecto
+
+pqrs-api/
+├── controllers/
+│   └── pqrsController.js
+├── models/
+│   └── pqrsModel.js
+├── routes/
+│   └── pqrsRoutes.js
+├── app.js
+├── package.json
+└── README.md
+
+Responsabilidad de cada capa
+
+ArchivoFunciónapp.jsInicializa Express, configura middlewares y conecta las rutaspqrsRoutes.jsDefine las URLs y métodos HTTP, y los dirige al controladorpqrsController.jsRecibe la petición, llama al modelo y envía la respuesta HTTPpqrsModel.jsSimula la base de datos en memoria y gestiona los datos (sin enviar respuestas HTTP)
+
+
+ Instalación
+
+bash# Clonar el repositorio
+git clone https://github.com/sararojas3315656/<nombre-del-repo>.git
+
+# Entrar a la carpeta del proyecto
+cd pqrs-api
+
+# Instalar dependencias
+npm install
+
+ Ejecución
+
+bash# Modo desarrollo (con recarga automática)
+npm run dev
+
+# Modo producción
+npm start
+
+El servidor corre por defecto en:
+
+http://localhost:3000
+
+
+ Endpoints disponibles
+
+Todas las rutas tienen como prefijo /api/pqrs.
+
+MétodoEndpointDescripciónCódigo de éxitoGET/api/pqrsObtener todas las PQRS200GET/api/pqrs/:idObtener una PQRS específica200POST/api/pqrsCrear una nueva PQRS201PUT/api/pqrs/:idActualizar una PQRS existente200DELETE/api/pqrs/:idEliminar una PQRS200
+
+ Estructura de una PQRS
+
+json{
+  "id": "uuid-generado-automaticamente",
+  "tipo": "Petición | Queja | Reclamo | Sugerencia",
+  "descripcion": "Texto descriptivo de la solicitud",
+  "solicitante": "Nombre del solicitante",
+  "estado": "pendiente",
+  "fechaCreacion": "2026-06-30T00:00:00.000Z",
+  "fechaActualizacion": "2026-06-30T00:00:00.000Z"
+}
+
+ Ejemplo de body para crear una PQRS (POST)
+
+json{
+  "tipo": "Queja",
+  "descripcion": "El servicio tardó más de lo esperado",
+  "solicitante": "Sara Rojas"
+}
+
+
+ Tecnologías utilizadas
+
+
+Node.js
+Express — framework para construir la API
+uuid — generación de identificadores únicos
+cors — habilitar peticiones desde otros orígenes
+nodemon (desarrollo) — recarga automática del servidor
+
+
+
+ Pruebas de funcionamiento
+
+Las pruebas de cada endpoint se realizaron utilizando Postman, verificando:
+
+
+Respuestas correctas según el método HTTP utilizado
+Códigos de estado adecuados (200, 201, 404, 500)
+Validación de campos obligatorios al crear una PQRS
+Comportamiento esperado al actualizar y eliminar registros existentes
+
+
+
+ Trabajo por:
+
+Sara Rojas - sararojas3315656 - saresro04@gmail.com
