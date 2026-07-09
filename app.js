@@ -11,7 +11,15 @@ app.use(express.json());
 app.use('/pqrs', pqrsRoutes);
 
 app.get('/', (req, res) => {
-  res.json({ message: 'API de PQRS funcionando' });
+  res.json({ message: 'Bienvenido al Sistema de Gestión Académica' });
+});
+
+app.get('/aprendices', (req, res) => {
+  res.json({ message: 'Gestión de aprendices: aquí se administra la información, registro y seguimiento de los aprendices del sistema.' });
+});
+
+app.get('/programas', (req, res) => {
+  res.json({ message: 'Gestión de programas de formación: aquí se gestionan los programas académicos, sus contenidos y la asignación a los aprendices.' });
 });
 
 app.use((err, req, res, next) => {
